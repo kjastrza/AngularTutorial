@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html data-ng-app="kjApp">
+<head>
+    <title>kjTestApp</title>
+</head>
+<body>
+<div>
+    <div class="container" data-ng-controller="KJController">
+        <h3>KJ test</h3>
+
+        Input: <input type="text" data-ng-model="myFirstInput" placeholder="Write an input here"/> Bind to {{
+        myFirstInput}}
+
+        <ul>
+            <li data-ng-repeat="name in names">{{name}}</li>
+        </ul>
+
+        First Name: <input type="text" data-ng-model="firstName"/>
+        <br/>
+        Last Name: <input type="text" data-ng-model="lastName"/>
+        <br/>
+        <button data-ng-click="addPerson()">Add person</button>
+        <br/>
+        Filter: <input type="text" data-ng-model="filterName"/>
+        <br/>
+
+        <ul>
+            <li data-ng-repeat="person in people|filter:filterName|orderBy:'firstName':true">{{person.firstName + ' ' +
+                person.lastName}}
+            </li>
+        </ul>
+
+        <div>
+            <div data-ng-view=""/>
+        </div>
+    </div>
+</div>
+
+<script src="Scripts/angular.js"></script>
+
+<script>
+
+    function SimpleController($scope) {
+        $scope.names = ['aaa1', 'bbb1', 'ccc1']
+
+        $scope.people = [
+            {firstName: 'Krzysztof1', lastName: 'Jastrzab1'},
+            {firstName: 'Krzysztof2', lastName: 'Jastrzab2'},
+            {firstName: 'Krzysztof3', lastName: 'Jastrzab3'}
+        ];
+
+        $scope.addPerson = function () {
+            $scope.people.push({firstName: $scope.firstName, lastName: $scope.lastName})
+        }
+    }
+
+    var kjApp = angular.module('kjApp', []);
+    kjApp.controller('KJController', SimpleController)
+
+    kjApp.config(function ($routeProvider) {
+        $routeProvider.when('/',
+                {
+                    controller: 'KJController',
+                    templateUrl: 'KJAppPartial1.html'
+                }).when('/kjpartial2',
+                {
+                    controller: 'KJController',
+                    templateUrl: 'KJAppPartial2.html'
+                }).otherwise({ redirectTo: '/' });
+    });
+
+</script>
+
+</body>
+</html>
